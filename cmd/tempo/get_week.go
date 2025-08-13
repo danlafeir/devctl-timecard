@@ -1,4 +1,4 @@
-package cmd
+package tempo
 
 import (
 	"encoding/json"
@@ -7,19 +7,22 @@ import (
 	"os"
 	"time"
 
+	"github.com/danlafeir/devctl/pkg/secrets"
 	"github.com/spf13/cobra"
 )
 
-var getWeekCmd = &cobra.Command{
+func GetWeekCmd() *cobra.Command {
+	return &cobra.Command{
 	Hidden: true,
 	Use:   "get-week",
 	Short: "Fetch your current week's timecard from Tempo API",
 	Run: func(cmd *cobra.Command, args []string) {
-		apiToken := os.Getenv("TEMPO_API_TOKEN")
-		if apiToken == "" {
-			fmt.Println("TEMPO_API_TOKEN environment variable is not set.")
+		token, err := secrets.DefaultSecrets.Read("tempo_api_token")
+		if err != nil || len(token) == 0 {
+			fmt.Println("Tempo API token not found. Please run 'tempo configure' first.")
 			os.Exit(1)
 		}
+		apiToken := string(token)
 
 		// Calculate current week start and end (Monday-Sunday)
 		now := time.Now()
@@ -62,8 +65,5 @@ var getWeekCmd = &cobra.Command{
 		pretty, _ := json.MarshalIndent(result, "", "  ")
 		fmt.Println(string(pretty))
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(getWeekCmd)
+	}
 }

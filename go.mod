@@ -1,9 +1,9 @@
 module github.com/danlafeir/devctl-tempo
 
-go 1.24.0
+go 1.24.3
 
 require (
-	github.com/keybase/go-keychain v0.0.1
+	github.com/danlafeir/devctl v0.0.0-20250724150701-b462a4250bbb
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 )

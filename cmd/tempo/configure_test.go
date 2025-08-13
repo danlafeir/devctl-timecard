@@ -1,4 +1,4 @@
-package cmd
+package tempo
 
 import (
 	"encoding/json"
