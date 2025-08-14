@@ -14,8 +14,7 @@ const (
 	MeetingTime       = "How much time did you spend in meetings (in hours): "
 )
 
-func RequestTimeInput() (devTime, ptoTime, supportTime, meetingTime int) {
-
+func requestTimeInput() (devTime, ptoTime, supportTime, meetingTime int) {
 	fmt.Printf("Answer the following questions to the best of your ability and estimate how you spent your time this week.\n")
 	fmt.Printf("We will ask about 4 things: development, PTO, support and meetings.\n")
 	fmt.Printf("(For the moment, this cannot exceed a total of 40 hours)\n\n")
@@ -48,7 +47,7 @@ func stringToInt(input string) int {
 	return convertedValue
 }
 
-func RequestDayOfWeek() time.Time {
+func requestDayOfWeek() time.Time {
 	mondayOfThisWeek := determineWeekforTimeSheet()
 
 	fmt.Printf("Would you like to fill out time for %s (Y/N)? ", mondayOfThisWeek.Format(time.DateOnly))
