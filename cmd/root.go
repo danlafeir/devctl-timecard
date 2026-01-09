@@ -62,7 +62,22 @@ var completionCmd = &cobra.Command{
 }
 
 func init() {
+	// Hide the help command
+	rootCmd.SetHelpCommand(&cobra.Command{
+		Hidden: true,
+	})
+
+	// Disable the completion command
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
+	rootCmd.CompletionOptions.HiddenDefaultCmd = true
+
+	// Add commands
 	rootCmd.AddCommand(tempo.TimesheetCmd())
 	rootCmd.AddCommand(tempo.ConfigureCmd())
 	rootCmd.AddCommand(tempo.GetWeekCmd())
+
+	// Hide completion command if it was already registered
+	if compCmd, _, _ := rootCmd.Find([]string{"completion"}); compCmd != nil {
+		compCmd.Hidden = true
+	}
 }

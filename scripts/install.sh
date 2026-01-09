@@ -37,11 +37,11 @@ chmod +x "$TMP"
 
 # Move to install dir (may require sudo)
 echo "Installing to $INSTALL_DIR/$BINARY ..."
-sudo mv "$TMP" "$INSTALL_DIR/$BINARY"
+mv "$TMP" "$INSTALL_DIR/$BINARY"
 
 if command -v $BINARY >/dev/null 2>&1; then
   echo "$BINARY installed successfully!"
-  $BINARY --help
+  echo "Ensure $INSTALL_DIR is in your PATH."
 else
   echo "Install failed: $BINARY not found in PATH." >&2
   exit 1

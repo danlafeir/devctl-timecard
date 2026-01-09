@@ -2,11 +2,125 @@
 
 A Go CLI for interacting with the Tempo API, using Cobra and Viper. Stores secrets securely on MacOS using the system keychain.
 
-## Prerequisites
+## Installation
+
+### Quick Install (Recommended)
+
+#### Standalone Build
+You can install the standalone `tempo` binary with:
+
+```sh
+curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install-standalone.sh | sh
+```
+
+This script will detect your OS and architecture, download the standalone binary (`tempo-<os>-<arch>`) and install it as `tempo` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
+
+#### Versioned Build (for devctl plugin)
+To install this as a plugin to [devctl](https://github.com/danlafeir/devctl), use the versioned build:
+
+```sh
+curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install.sh | sh
+```
+
+This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` as `devctl-tempo`. Ensure `~/.local/bin` is in your PATH.
+
+**Security tip:** Always review install scripts before piping to `sh`.
+
+## Usage
+
+### Configuration
+
+#### Getting Your Tempo API Token
+To create an API token in Tempo:
+
+1. Log in to your Atlassian account and navigate to Tempo
+2. Go to **Settings** → **API Integration** (or **Profile** → **API tokens**)
+3. Click **Create API Token** or **New Token**
+4. Give your token a descriptive name (e.g., "tempo-cli")
+5. Ensure the token has permission to manage **Worklogs**
+6. Copy the generated token (you won't be able to see it again)
+
+**Important:** The API token must have permissions to manage Worklogs for the tool to function correctly.
+
+#### Getting Your Account ID from Atlassian
+To find your Account ID (also known as Atlassian Account ID):
+
+1. Log in to your Atlassian instance and select the JIRA app
+2. Click on your profile picture/avatar in the top-right corner
+3. Select **Profile**
+4. Your Account ID will be displayed in URL path after `/people/<account_id>?...`
+
+**Note:** This Account ID is associated with your profile in JIRA/Atlassian and is different from your username or email.
+
+#### Running Configuration
+To configure your Tempo API token, account ID, and default issue ID:
+
+**If installed as standalone (`tempo`):**
+```sh
+tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
+```
+
+**If installed as devctl plugin (`devctl-tempo`):**
+```sh
+devctl tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
+```
+You can also omit flags to be prompted interactively.
+
+- The API token is stored securely in the MacOS keychain.
+- The account ID and default issue ID are stored in `$HOME/.devctl/config.yaml` under a `tempo` key.
+
+The issue ID will be automatically fetched from your most recent Tempo worklog entry. If the API call fails, you'll be prompted to enter it manually.
+
+### Available Commands
+
+#### `timesheet`
+Submit a Tempo timesheet for the current week (or a past week). This is the main command for logging time.
+
+**If installed as standalone (`tempo`):**
+```sh
+tempo timesheet
+```
+
+**If installed as devctl plugin (`devctl-tempo`):**
+```sh
+devctl tempo timesheet
+```
+
+The command will:
+1. Prompt you to confirm the week (defaults to current week, or you can specify weeks back)
+2. Ask for time spent in three categories:
+   - Development/design/testing (capitalizable time)
+   - PTO (vacation or sick time)
+   - Meeting time
+3. Submit all time entries to Tempo via the API
+
+#### `configure`
+Set up your Tempo API token, account ID, and default issue ID.
+
+**If installed as standalone (`tempo`):**
+```sh
+tempo configure
+```
+
+**If installed as devctl plugin (`devctl-tempo`):**
+```sh
+devctl-tempo configure
+```
+
+Options:
+- `--token` - Tempo API token
+- `--account-id` - Your Tempo account ID (from JIRA)
+
+### Hidden Commands
+- `get-week` — Fetch your current week's timecard from the Tempo API (for debugging)
+
+## Development
+
+### Prerequisites
 - Go 1.24.3+
 - (For MacOS secrets) Keychain access
 
-## Setup
+### Setup
 Clone the repository and install dependencies:
 ```sh
 git clone <repo-url>
@@ -14,13 +128,8 @@ cd devctl-tempo
 go mod tidy
 ```
 
-## Testing
-Run all tests:
-```sh
-make test
-```
+### Building
 
-## Building
 Build for your current OS and architecture:
 ```sh
 make build
@@ -50,29 +159,7 @@ Cross-compile for a specific system:
 GOOS=linux GOARCH=amd64 make build
 ```
 
-## Quick Install (Online Script)
-
-### Versioned Build (with git hash)
-You can install the latest `devctl-tempo` binary automatically with a one-liner (Linux/macOS):
-
-```sh
-curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install.sh | sh
-```
-
-This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` (you may be prompted for your password).
-
-### Standalone Build
-You can install the standalone `tempo` binary with:
-
-```sh
-curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install-standalone.sh | sh
-```
-
-This script will detect your OS and architecture, download the standalone binary (`tempo-<os>-<arch>`) and install it as `tempo` to `~/.local/bin` (you may be prompted for your password).
-
-**Security tip:** Always review install scripts before piping to `sh`.
-
-## Running
+### Running Locally
 After building, run the CLI:
 ```sh
 ./bin/devctl-tempo-<os>-<arch>-<hash> <command>
@@ -83,51 +170,16 @@ For example:
 ./bin/devctl-tempo-darwin-arm64-d58b1d5 <command>
 ```
 
-## Configuration
-To configure your Tempo API token, account ID, and default issue ID:
+Or if you built the standalone version:
 ```sh
-./bin/devctl-tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
-```
-You can also omit flags to be prompted interactively.
-
-- The API token is stored securely in the MacOS keychain.
-- The account ID and default issue ID are stored in `$HOME/.devctl/config.yaml` under a `tempo` key.
-
-**Note:** The account ID is associated with your profile in JIRA. You can find it by doing a "people search" in JIRA.
-
-## Available Commands
-
-### `timesheet`
-Submit a Tempo timesheet for the current week (or a past week). This is the main command for logging time.
-
-```sh
-./bin/devctl-tempo timesheet
+./bin/tempo <command>
 ```
 
-The command will:
-1. Prompt you to confirm the week (defaults to current week, or you can specify weeks back)
-2. Ask for time spent in three categories:
-   - Development/design/testing (capitalizable time)
-   - PTO (vacation or sick time)
-   - Meeting time
-3. Submit all time entries to Tempo via the API
-
-### `configure`
-Set up your Tempo API token, account ID, and default issue ID.
-
+### Testing
+Run all tests:
 ```sh
-./bin/devctl-tempo configure
+make test
 ```
-
-Options:
-- `--token` - Tempo API token
-- `--account-id` - Your Tempo account ID (from JIRA)
-
-The issue ID will be automatically fetched from your most recent Tempo worklog entry. If the API call fails, you'll be prompted to enter it manually.
-
-### Hidden Commands
-- `get-week` — Fetch your current week's timecard from the Tempo API (for debugging)
-- `completion` — Generate shell completion scripts (bash, zsh, fish, powershell)
 
 ## Notes
 - Only MacOS is currently supported for secure secrets storage.
