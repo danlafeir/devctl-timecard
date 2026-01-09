@@ -8,21 +8,21 @@ import (
 )
 
 const (
-	CapitalizableTime = "How much time did you spend developing, designing or testing software (in hours): "
+	CapitalizableTime = "How much time did you spend developing, designing or testing software? This is considered capitalizable time (in hours): "
 	PtoTime           = "How much time did you spend with PTO (vacation or sick) (in hours): "
-	MeetingTime       = "How much time did you spend in meetings (in hours): "
+	OtherTime         = "How much time did you spend on other activities i.e. meetings, etc. (in hours): "
 )
 
-func requestTimeInput() (devTime, ptoTime, meetingTime int) {
+func requestTimeInput() (capitalizableTime, ptoTime, otherTime int) {
 	fmt.Printf("Answer the following questions to the best of your ability and estimate how you spent your time this week.\n")
-	fmt.Printf("We will ask about 3 things: development, PTO, and meetings.\n")
+	fmt.Printf("We will ask about 3 things: capitalizable time, PTO, and other activities.\n")
 	fmt.Printf("(For the moment, this cannot exceed a total of 40 hours)\n\n")
 
-	devTime = getTime(CapitalizableTime)
+	capitalizableTime = getTime(CapitalizableTime)
 	ptoTime = getTime(PtoTime)
-	meetingTime = getTime(MeetingTime)
+	otherTime = getTime(OtherTime)
 
-	totalHoursThisWeek := meetingTime + ptoTime + devTime
+	totalHoursThisWeek := otherTime + ptoTime + capitalizableTime
 
 	print(fmt.Sprintf("Total hours this week: %s\n", strconv.Itoa(totalHoursThisWeek)))
 	return

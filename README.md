@@ -95,7 +95,7 @@ The command will:
 2. Ask for time spent in three categories:
    - Development/design/testing (capitalizable time)
    - PTO (vacation or sick time)
-   - Meeting time
+   - Other time
 3. Submit all time entries to Tempo via the API
 
 #### `configure`

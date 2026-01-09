@@ -42,6 +42,8 @@ func ConfigureCmd() *cobra.Command {
 }
 
 func TimesheetCmd() *cobra.Command {
+	var capitalizableTime, ptoTime, otherTime int
+
 	cmd := &cobra.Command{
 		Use:     "timesheet",
 		Short:   "Submit a Tempo timesheet",
@@ -50,15 +52,33 @@ func TimesheetCmd() *cobra.Command {
 			bearerToken := fetchBearerToken()
 			accountId, issueId := fetchConfig()
 			startOfWeek := requestDayOfWeek()
-			devTime, ptoTime, meetingTime := requestTimeInput()
 
-			if err := api.SendWorklog(api.DevWorkType, devTime, startOfWeek, bearerToken, accountId, issueId); err != nil {
+			// Use CLI flags if provided, otherwise prompt interactively
+			hasAnyFlag := cmd.Flags().Changed("capitalizable-time") || cmd.Flags().Changed("pto-time") || cmd.Flags().Changed("other-time")
+
+			if !hasAnyFlag {
+				// No flags provided, use interactive prompts for all
+				capitalizableTime, ptoTime, otherTime = requestTimeInput()
+			} else {
+				// Some or all flags provided - use flags for set values, prompt for missing ones
+				if !cmd.Flags().Changed("capitalizable-time") {
+					capitalizableTime = getTime(CapitalizableTime)
+				}
+				if !cmd.Flags().Changed("pto-time") {
+					ptoTime = getTime(PtoTime)
+				}
+				if !cmd.Flags().Changed("other-time") {
+					otherTime = getTime(OtherTime)
+				}
+			}
+
+			if err := api.SendWorklog(api.CapitalizableWorkType, capitalizableTime, startOfWeek, bearerToken, accountId, issueId); err != nil {
 				return err
 			}
 			if err := api.SendWorklog(api.PtoWorkType, ptoTime, startOfWeek, bearerToken, accountId, issueId); err != nil {
 				return err
 			}
-			if err := api.SendWorklog(api.MeetingWorkType, meetingTime, startOfWeek, bearerToken, accountId, issueId); err != nil {
+			if err := api.SendWorklog(api.OtherWorkType, otherTime, startOfWeek, bearerToken, accountId, issueId); err != nil {
 				return err
 			}
 
@@ -66,5 +86,10 @@ func TimesheetCmd() *cobra.Command {
 			return nil
 		},
 	}
+
+	cmd.Flags().IntVarP(&capitalizableTime, "capitalizable-time", "c", 0, "Capitalizable time in hours")
+	cmd.Flags().IntVarP(&ptoTime, "pto-time", "p", 0, "PTO time in hours")
+	cmd.Flags().IntVarP(&otherTime, "other-time", "m", 0, "Other time in hours")
+
 	return cmd
 }

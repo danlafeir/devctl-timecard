@@ -58,7 +58,7 @@ type UserWorklogsResponse struct {
 }
 
 var (
-	DevWorkType = WorkType{
+	CapitalizableWorkType = WorkType{
 		Key:   "_WorkType_",
 		Value: "14C",
 	}
@@ -66,7 +66,7 @@ var (
 		Key:   "_WorkType_",
 		Value: "20E",
 	}
-	MeetingWorkType = WorkType{
+	OtherWorkType = WorkType{
 		Key:   "_WorkType_",
 		Value: "12E",
 	}

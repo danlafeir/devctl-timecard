@@ -23,9 +23,9 @@ func TestConstants(t *testing.T) {
 			expected: "How much time did you spend with PTO (vacation or sick) (in hours): ",
 		},
 		{
-			name:     "MeetingTime constant",
-			constant: MeetingTime,
-			expected: "How much time did you spend in meetings (in hours): ",
+			name:     "OtherTime constant",
+			constant: OtherTime,
+			expected: "How much time did you spend on other activities (in hours): ",
 		},
 	}
 
@@ -149,43 +149,43 @@ func TestRequestTimeInput_Logic(t *testing.T) {
 	
 	tests := []struct {
 		name          string
-		devTime, ptoTime, meetingTime int
+		capitalizableTime, ptoTime, otherTime int
 		expectedTotal int
 	}{
 		{
-			name:          "All zeros",
-			devTime:       0,
-			ptoTime:       0,
-			meetingTime:   0,
-			expectedTotal: 0,
+			name:              "All zeros",
+			capitalizableTime: 0,
+			ptoTime:           0,
+			otherTime:         0,
+			expectedTotal:     0,
 		},
 		{
-			name:          "Standard work week",
-			devTime:       36,
-			ptoTime:       0,
-			meetingTime:   4,
-			expectedTotal: 40,
+			name:              "Standard work week",
+			capitalizableTime: 36,
+			ptoTime:           0,
+			otherTime:         4,
+			expectedTotal:     40,
 		},
 		{
-			name:          "Vacation week",
-			devTime:       0,
-			ptoTime:       40,
-			meetingTime:   0,
-			expectedTotal: 40,
+			name:              "Vacation week",
+			capitalizableTime: 0,
+			ptoTime:           40,
+			otherTime:         0,
+			expectedTotal:     40,
 		},
 		{
-			name:          "Mixed week",
-			devTime:       26,
-			ptoTime:       8,
-			meetingTime:   6,
-			expectedTotal: 40,
+			name:              "Mixed week",
+			capitalizableTime: 26,
+			ptoTime:           8,
+			otherTime:         6,
+			expectedTotal:     40,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Test the calculation logic from requestTimeInput
-			totalHoursThisWeek := tt.meetingTime + tt.ptoTime + tt.devTime
+			totalHoursThisWeek := tt.otherTime + tt.ptoTime + tt.capitalizableTime
 			
 			if totalHoursThisWeek != tt.expectedTotal {
 				t.Errorf("Total hours calculation: got %d, expected %d", totalHoursThisWeek, tt.expectedTotal)
