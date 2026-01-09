@@ -198,15 +198,15 @@ func SendWorklog(workType WorkType, hours int, startDay time.Time, bearerToken, 
 	return nil
 }
 
-// calculateWeekPriorDate calculates the date that is one week prior to the current date.
+// calculateWeekPriorDate calculates the date that is two weeks prior to the current date.
 // Returns the date formatted as YYYY-MM-DD.
 func calculateWeekPriorDate() string {
-	oneWeekAgo := time.Now().AddDate(0, 0, -daysInWeek)
-	return oneWeekAgo.Format(time.DateOnly)
+	twoWeeksAgo := time.Now().AddDate(0, 0, -daysInWeek*2)
+	return twoWeeksAgo.Format(time.DateOnly)
 }
 
 // GetRecentIssueId fetches worklogs for a specific user account from the Tempo API.
-// It queries worklogs updated from one week prior to the current date.
+// It queries worklogs updated from two weeks prior to the current date.
 // Returns the issue ID from the last worklog entry in the results, or an error if the request fails or no results are found.
 func GetRecentIssueId(accountID, bearerToken string) (int, error) {
 	updatedFrom := calculateWeekPriorDate()

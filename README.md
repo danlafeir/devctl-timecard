@@ -28,7 +28,7 @@ This script will detect your OS and architecture, download the latest versioned 
 
 ## Usage
 
-**Important:** Before using this tool, you need to have at least one timecard entry filled out in Tempo for the current week (or within the past week). This is required because the tool automatically fetches your most recent issue ID from your worklog entries to use as the default issue ID.
+**Important:** Before using this tool, you need to have at least one timecard entry filled out in Tempo within the past two weeks. This is required because the tool automatically fetches your most recent issue ID from your worklog entries to use as the default issue ID.
 
 ### Configuration
 
@@ -73,7 +73,7 @@ You can also omit flags to be prompted interactively.
   - **Standalone binary (`tempo`)**: `$HOME/.tempo/config.yaml`
   - **devctl plugin (`devctl-tempo`)**: `$HOME/.devctl/config.yaml`
 
-The issue ID will be automatically fetched from your most recent Tempo worklog entry. If the API call fails, you'll be prompted to enter it manually.
+The issue ID will be automatically fetched from your most recent Tempo worklog entry (within the past two weeks). Make sure you assigned to the JIRA Project and use a JIRA card that belongs to the appropiate project.
 
 ### Available Commands
 
