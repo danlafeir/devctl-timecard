@@ -28,6 +28,8 @@ This script will detect your OS and architecture, download the latest versioned 
 
 ## Usage
 
+**Important:** Before using this tool, you need to have at least one timecard entry filled out in Tempo for the current week (or within the past week). This is required because the tool automatically fetches your most recent issue ID from your worklog entries to use as the default issue ID.
+
 ### Configuration
 
 #### Getting Your Tempo API Token

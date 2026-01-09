@@ -45,9 +45,7 @@ func configureApiToken(apiToken string) string {
 
 func configureAccountId(accountId string) {
 	if accountId == "" {
-		fmt.Printf("We need your Tempo Account Id. This is associated with your profile in JIRA.\n")
-		fmt.Printf("Do a 'people search' to find your id.\n")
-		fmt.Printf("Add Tempo Account Id here: ")
+		fmt.Print("Add Tempo Account Id here: ")
 		scanner := bufio.NewScanner(os.Stdin)
 		scanner.Scan()
 		accountId = strings.TrimSpace(scanner.Text())

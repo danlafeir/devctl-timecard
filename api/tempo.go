@@ -222,6 +222,7 @@ func GetRecentIssueId(accountID, bearerToken string) (int, error) {
 		return 0, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
 
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
 
