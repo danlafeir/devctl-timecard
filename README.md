@@ -69,7 +69,9 @@ devctl tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
 You can also omit flags to be prompted interactively.
 
 - The API token is stored securely in the MacOS keychain.
-- The account ID and default issue ID are stored in `$HOME/.devctl/config.yaml` under a `tempo` key.
+- The account ID and default issue ID are stored in the config file under a `tempo` key:
+  - **Standalone binary (`tempo`)**: `$HOME/.tempo/config.yaml`
+  - **devctl plugin (`devctl-tempo`)**: `$HOME/.devctl/config.yaml`
 
 The issue ID will be automatically fetched from your most recent Tempo worklog entry. If the API call fails, you'll be prompted to enter it manually.
 

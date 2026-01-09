@@ -9,6 +9,7 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -99,6 +100,11 @@ func createWorklogRequest(workType WorkType, hours int, date time.Time, accountI
 	}
 }
 
+// cleanBearerToken removes whitespace and newlines from the bearer token.
+func cleanBearerToken(token string) string {
+	return strings.TrimSpace(token)
+}
+
 // sendWorklogEntry sends a single worklog entry to the Tempo API.
 func sendWorklogEntry(reqBody *WorklogRequest, bearerToken string) error {
 	jsonData, err := json.Marshal(reqBody)
@@ -111,9 +117,10 @@ func sendWorklogEntry(reqBody *WorklogRequest, bearerToken string) error {
 		return fmt.Errorf("failed to create HTTP request: %w", err)
 	}
 
+	cleanedToken := cleanBearerToken(bearerToken)
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Accept", "application/json")
-	httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
+	httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", cleanedToken))
 
 	client := &http.Client{}
 	resp, err := client.Do(httpReq)
@@ -222,9 +229,10 @@ func GetRecentIssueId(accountID, bearerToken string) (int, error) {
 		return 0, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
 
+	cleanedToken := cleanBearerToken(bearerToken)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", cleanedToken))
 
 	// Send request
 	client := &http.Client{}

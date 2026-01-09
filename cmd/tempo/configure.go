@@ -94,6 +94,28 @@ func getConfigPath() string {
 	if err != nil {
 		log.Fatal("Failed to get user home directory:", err)
 	}
+
+	// Detect binary name to determine config location
+	// If running as "tempo" (standalone), use .tempo/config.yaml
+	// Otherwise (devctl-tempo), use .devctl/config.yaml
+	var execName string
+	if len(os.Args) > 0 {
+		execPath := os.Args[0]
+		execName = filepath.Base(execPath)
+		// Remove any extensions and check if it's the standalone binary
+		execName = strings.TrimSuffix(execName, filepath.Ext(execName))
+	}
+
+	if execName == "tempo" {
+		tempoConfigDir := filepath.Join(homeDir, ".tempo")
+		// Ensure .tempo directory exists for standalone binary
+		if err := os.MkdirAll(tempoConfigDir, 0755); err != nil {
+			log.Fatal("Failed to create .tempo config directory:", err)
+		}
+		return filepath.Join(tempoConfigDir, "config.yaml")
+	}
+
+	// Default to devctl config location
 	return filepath.Join(homeDir, ".devctl", "config.yaml")
 }
 
@@ -105,6 +127,15 @@ func initConfig() {
 	// Create config directory if it doesn't exist
 	if err := os.MkdirAll(configDir, 0755); err != nil {
 		log.Fatal("Failed to create config directory:", err)
+	}
+
+	// Create config file if it doesn't exist (with empty tempo structure)
+	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {
+		// Create empty config file with tempo key structure
+		emptyConfig := []byte("tempo:\n")
+		if err := os.WriteFile(configFilePath, emptyConfig, 0644); err != nil {
+			log.Fatal("Failed to create config file:", err)
+		}
 	}
 
 	viper.SetConfigName(configName)
