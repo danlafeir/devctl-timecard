@@ -136,6 +136,13 @@ func handleAPIError(resp *http.Response, reqBody *WorklogRequest) error {
 		return fmt.Errorf("HTTP %d error (unable to read response body): %w", resp.StatusCode, err)
 	}
 
+	// Handle 401 Unauthorized - suggest reconfiguring API token
+	if resp.StatusCode == http.StatusUnauthorized {
+		log.Printf("❌ Authentication Failed (HTTP 401)\n")
+		log.Printf("🔑 Your Tempo API token appears to be invalid or expired.\n")
+		return fmt.Errorf("Authentication failed: Please configure a new Tempo API token")
+	}
+
 	// Log detailed error information for debugging
 	if resp.StatusCode >= 400 && resp.StatusCode < 500 {
 		log.Printf("❌ API Request Failed (HTTP %d)\n", resp.StatusCode)
@@ -231,6 +238,17 @@ func GetRecentIssueId(accountID, bearerToken string) (int, error) {
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return 0, fmt.Errorf("HTTP %d error (unable to read response body): %w", resp.StatusCode, err)
+		}
+
+		// Handle 401 Unauthorized - suggest reconfiguring API token
+		if resp.StatusCode == http.StatusUnauthorized {
+			log.Printf("❌ Authentication Failed (HTTP 401)\n")
+			log.Printf("🔑 Your Tempo API token appears to be invalid or expired.\n")
+			log.Printf("💡 Please configure a new Tempo API token by running:\n")
+			log.Printf("   tempo configure --token <YOUR_NEW_TOKEN>\n")
+			log.Printf("   or\n")
+			log.Printf("   devctl tempo configure --token <YOUR_NEW_TOKEN>\n")
+			return 0, fmt.Errorf("authentication failed: please configure a new Tempo API token")
 		}
 
 		log.Printf("❌ GetRecentIssueId API Request Failed (HTTP %d)\n", resp.StatusCode)
