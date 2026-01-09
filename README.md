@@ -10,7 +10,7 @@ A Go CLI for interacting with the Tempo API, using Cobra and Viper. Stores secre
 You can install the standalone `tempo` binary with:
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install-standalone.sh | sh
+curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install-standalone.sh | sh
 ```
 
 This script will detect your OS and architecture, download the standalone binary (`tempo-<os>-<arch>`) and install it as `tempo` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
@@ -19,7 +19,7 @@ This script will detect your OS and architecture, download the standalone binary
 To install this as a plugin to [devctl](https://github.com/danlafeir/devctl), use the versioned build:
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-tempo/main/scripts/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install.sh | sh
 ```
 
 This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` as `devctl-tempo`. Ensure `~/.local/bin` is in your PATH.
