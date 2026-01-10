@@ -20,17 +20,14 @@ all: build-all build-all-devctl
 
 build:
 	@echo "Building $(APP_NAME) for $(GOOS)/$(GOARCH)..."
-	@rm -rf $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)
-	@GIT_HASH=$$(git rev-parse --short HEAD 2>/dev/null || echo "unknown"); \
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.BuildGitHash=$$GIT_HASH' -X 'main.BuildLatestHash=$$GIT_HASH'" -o $(BUILD_DIR)/$(APP_NAME)-$(GOOS)-$(GOARCH)-$$GIT_HASH ./main.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BUILD_DIR)/$(APP_NAME) ./main.go
 	@echo "Built $(APP_NAME) successfully to target /$(BUILD_DIR)"
 
 build-devctl:
 	@echo "Building timecard binary for $(GOOS)/$(GOARCH)..."
 	@mkdir -p $(BUILD_DIR)
-	@GIT_HASH=$$(git rev-parse --short HEAD 2>/dev/null || echo "unknown"); \
-	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags "-X 'main.BuildGitHash=$$GIT_HASH' -X 'main.BuildLatestHash=$$GIT_HASH'" -o $(BUILD_DIR)/timecard ./main.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BUILD_DIR)/timecard ./main.go
 	@echo "Built $(DEVCTL_PLUGIN_NAME) successfully to target /$(BUILD_DIR)"
 
 build-all:

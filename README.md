@@ -67,16 +67,6 @@ The issue ID will be automatically fetched from your most recent Tempo worklog e
 #### `add-week`
 Add a time entry for the current week (or a past week) to Tempo. This is the main command for logging time.
 
-**If installed as `timecard` binary:**
-```sh
-timecard add-week
-```
-
-**If installed as devctl plugin (`devctl-timecard`):**
-```sh
-devctl timecard add-week
-```
-
 The command will:
 1. Prompt you to confirm the week (defaults to current week, or you can specify weeks back)
 2. Ask for time spent in three categories:
@@ -86,17 +76,7 @@ The command will:
 3. Submit all time entries to Tempo via the API
 
 #### `configure`
-Set up your Tempo API token, account ID, and default issue ID.
-
-**If installed as `timecard` binary:**
-```sh
-timecard configure
-```
-
-**If installed as devctl plugin (`devctl-timecard`):**
-```sh
-devctl timecard configure
-```
+Set up your API token and Account Id
 
 Options:
 - `--token` - Tempo API token
@@ -104,20 +84,14 @@ Options:
 
 ### Hidden Commands
 - `get-week` — Fetch your current week's timecard from the Tempo API (for debugging)
+> I am still working on this 
 
 ## Development
 
 ### Prerequisites
 - Go 1.24.3+
-- (For MacOS secrets) Keychain access
+- MacOS because I have not generalized the secrets interaction
 
-### Setup
-Clone the repository and install dependencies:
-```sh
-git clone <repo-url>
-cd devctl-timecard
-go mod tidy
-```
 
 ### Building
 
@@ -125,45 +99,23 @@ Build for your current OS and architecture:
 ```sh
 make build
 ```
-The binary will be output to `bin/devctl-timecard-<os>-<arch>-<hash>`.
 
 Build for all supported OS/arch:
 ```sh
 make build-all
 ```
-Binaries for Linux, MacOS (amd64/arm64) will be in `bin/`.
 
-Build a binary named `timecard` for your current system:
+Build a binaries as a [devctl](https://github.com/danlafeir/devctl) plugin
 ```sh
-make build-standalone
-```
-The binary will be output to `bin/timecard`.
-
-Build binaries for all supported OS/arch:
-```sh
-make build-all-standalone
-```
-Binaries (timecard-linux-amd64, timecard-linux-arm64, timecard-darwin-amd64, timecard-darwin-arm64) will be in `bin/`.
-
-Cross-compile for a specific system:
-```sh
-GOOS=linux GOARCH=amd64 make build
+make build-devctl
+# or
+make build-all-devctl
 ```
 
 ### Running Locally
 After building, run the CLI:
 ```sh
-./bin/devctl-timecard-<os>-<arch>-<hash> <command>
-```
-
-For example:
-```sh
-./bin/devctl-timecard-darwin-arm64-d58b1d5 <command>
-```
-
-Or if you built the `timecard` binary:
-```sh
-./bin/timecard <command>
+./bin/timecard
 ```
 
 ### Testing
