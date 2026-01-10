@@ -18,7 +18,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/danlafeir/devctl-timecard/cmd/tempo"
+	"github.com/danlafeir/devctl-timecard/cmd/timecard"
 	"github.com/spf13/cobra"
 )
 
@@ -72,9 +72,9 @@ func init() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 
 	// Add commands
-	rootCmd.AddCommand(tempo.TimesheetCmd())
-	rootCmd.AddCommand(tempo.ConfigureCmd())
-	rootCmd.AddCommand(tempo.GetWeekCmd())
+	rootCmd.AddCommand(timecard.AddEntryCmd())
+	rootCmd.AddCommand(timecard.ConfigureCmd())
+	rootCmd.AddCommand(timecard.GetWeekCmd())
 
 	// Hide completion command if it was already registered
 	if compCmd, _, _ := rootCmd.Find([]string{"completion"}); compCmd != nil {

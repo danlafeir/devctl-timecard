@@ -1,4 +1,4 @@
-package tempo
+package timecard
 
 import (
 	"testing"
@@ -15,7 +15,7 @@ func TestConstants(t *testing.T) {
 		{
 			name:     "CapitalizableTime constant",
 			constant: CapitalizableTime,
-			expected: "How much time did you spend developing, designing or testing software (in hours): ",
+			expected: "How much time did you spend developing, designing or testing software? This is considered capitalizable time (in hours): ",
 		},
 		{
 			name:     "PtoTime constant",
@@ -25,7 +25,7 @@ func TestConstants(t *testing.T) {
 		{
 			name:     "OtherTime constant",
 			constant: OtherTime,
-			expected: "How much time did you spend on other activities (in hours): ",
+			expected: "How much time did you spend on other activities i.e. meetings, etc. (in hours): ",
 		},
 	}
 

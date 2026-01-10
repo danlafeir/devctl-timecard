@@ -64,17 +64,17 @@ The issue ID will be automatically fetched from your most recent Tempo worklog e
 
 ### Available Commands
 
-#### `timesheet`
-Submit a timesheet for the current week (or a past week) to Tempo. This is the main command for logging time.
+#### `add-week`
+Add a time entry for the current week (or a past week) to Tempo. This is the main command for logging time.
 
 **If installed as `timecard` binary:**
 ```sh
-timecard timesheet
+timecard add-week
 ```
 
 **If installed as devctl plugin (`devctl-timecard`):**
 ```sh
-devctl timecard timesheet
+devctl timecard add-week
 ```
 
 The command will:

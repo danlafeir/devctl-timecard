@@ -1,4 +1,4 @@
-package tempo
+package timecard
 
 import (
 	"fmt"
@@ -41,13 +41,13 @@ func ConfigureCmd() *cobra.Command {
 	return configureCmd
 }
 
-func TimesheetCmd() *cobra.Command {
+func AddEntryCmd() *cobra.Command {
 	var capitalizableTime, ptoTime, otherTime int
 
 	cmd := &cobra.Command{
-		Use:     "timesheet",
-		Short:   "Submit a timesheet to Tempo",
-		Example: "devctl timecard timesheet",
+		Use:     "add-week",
+		Short:   "Add a timecard entry for a week of time",
+		Example: "timecard add-week",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			bearerToken := fetchBearerToken()
 			accountId, issueId := fetchConfig()

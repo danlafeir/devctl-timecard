@@ -1,4 +1,4 @@
-package tempo
+package timecard
 
 import (
 	"encoding/json"
