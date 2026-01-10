@@ -96,19 +96,19 @@ func getConfigPath() string {
 	}
 
 	// Detect binary name to determine config location
-	// If running as "timecard" (standalone), use .timecard/config.yaml
+	// If running as "timecard", use .timecard/config.yaml
 	// Otherwise (devctl-timecard), use .devctl/config.yaml
 	var execName string
 	if len(os.Args) > 0 {
 		execPath := os.Args[0]
 		execName = filepath.Base(execPath)
-		// Remove any extensions and check if it's the standalone binary
+		// Remove any extensions and check if it's the timecard binary
 		execName = strings.TrimSuffix(execName, filepath.Ext(execName))
 	}
 
 	if execName == "timecard" {
 		timecardConfigDir := filepath.Join(homeDir, ".timecard")
-		// Ensure .timecard directory exists for standalone binary
+		// Ensure .timecard directory exists for timecard binary
 		if err := os.MkdirAll(timecardConfigDir, 0755); err != nil {
 			log.Fatal("Failed to create .timecard config directory:", err)
 		}

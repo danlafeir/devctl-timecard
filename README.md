@@ -8,27 +8,13 @@ I am trying to create a constellation of CLI tools that make my life easier.
 
 ## Installation
 
-### Quick Install (Recommended)
-
-#### Standalone Build
-You can install the standalone `timecard` binary with:
-
-```sh
-curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install-standalone.sh | sh
-```
-
-This script will detect your OS and architecture, download the standalone binary (`timecard-<os>-<arch>`) and install it as `timecard` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
-
-#### Versioned Build (for devctl plugin)
-To install this as a plugin to [devctl](https://github.com/danlafeir/devctl), use the versioned build:
+You can install the `timecard` binary with:
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install.sh | sh
 ```
 
-This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` as `devctl-timecard`. Ensure `~/.local/bin` is in your PATH.
-
-**Security tip:** Always review install scripts before piping to `sh`.
+This script will detect your OS and architecture, download the binary (`timecard-<os>-<arch>`) and install it as `timecard` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
 
 ## Usage
 
@@ -59,22 +45,19 @@ To find your Account ID (also known as Atlassian Account ID):
 **Note:** This Account ID is associated with your profile in JIRA/Atlassian and is different from your username or email.
 
 #### Running Configuration
-To configure your Tempo API token, account ID, and default issue ID:
+To configure your Tempo API token and account ID.
 
-**If installed as standalone (`timecard`):**
+
+**If installed as `timecard` binary:**
 ```sh
 timecard configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
 ```
 
-**If installed as devctl plugin (`devctl-timecard`):**
-```sh
-devctl timecard configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
-```
 You can also omit flags to be prompted interactively.
 
-- The API token is stored securely in the MacOS keychain.
+- The API token is stored securely in the device's secure storage.
 - The account ID and default issue ID are stored in the config file under a `tempo` key:
-  - **Standalone binary (`timecard`)**: `$HOME/.timecard/config.yaml`
+  - **`timecard` binary**: `$HOME/.timecard/config.yaml`
   - **devctl plugin (`devctl-timecard`)**: `$HOME/.devctl/config.yaml`
 
 The issue ID will be automatically fetched from your most recent Tempo worklog entry (within the past two weeks). Make sure you assigned to the JIRA Project and use a JIRA card that belongs to the appropiate project.
@@ -84,7 +67,7 @@ The issue ID will be automatically fetched from your most recent Tempo worklog e
 #### `timesheet`
 Submit a timesheet for the current week (or a past week) to Tempo. This is the main command for logging time.
 
-**If installed as standalone (`timecard`):**
+**If installed as `timecard` binary:**
 ```sh
 timecard timesheet
 ```
@@ -105,7 +88,7 @@ The command will:
 #### `configure`
 Set up your Tempo API token, account ID, and default issue ID.
 
-**If installed as standalone (`timecard`):**
+**If installed as `timecard` binary:**
 ```sh
 timecard configure
 ```
@@ -150,17 +133,17 @@ make build-all
 ```
 Binaries for Linux, MacOS (amd64/arm64) will be in `bin/`.
 
-Build a standalone binary named `timecard` for your current system:
+Build a binary named `timecard` for your current system:
 ```sh
 make build-standalone
 ```
 The binary will be output to `bin/timecard`.
 
-Build standalone binaries for all supported OS/arch:
+Build binaries for all supported OS/arch:
 ```sh
 make build-all-standalone
 ```
-Standalone binaries (timecard-linux-amd64, timecard-linux-arm64, timecard-darwin-amd64, timecard-darwin-arm64) will be in `bin/`.
+Binaries (timecard-linux-amd64, timecard-linux-arm64, timecard-darwin-amd64, timecard-darwin-arm64) will be in `bin/`.
 
 Cross-compile for a specific system:
 ```sh
@@ -178,7 +161,7 @@ For example:
 ./bin/devctl-timecard-darwin-arm64-d58b1d5 <command>
 ```
 
-Or if you built the standalone version:
+Or if you built the `timecard` binary:
 ```sh
 ./bin/timecard <command>
 ```

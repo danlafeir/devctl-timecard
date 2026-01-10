@@ -2,7 +2,7 @@
 set -e
 
 REPO=danlafeir/devctl-timecard
-BINARY=timecard
+BINARY=devctl-timecard
 INSTALL_DIR=~/.local/bin
 
 # Detect OS
@@ -21,9 +21,13 @@ case "$ARCH" in
   *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
 esac
 
-# Find the standalone binary for this OS/ARCH
-# Standalone builds use the pattern: timecard-<os>-<arch>
-FILENAME="timecard-$OS-$ARCH"
+# Find the latest binary for this OS/ARCH by querying the GitHub API
+API_URL="https://api.github.com/repos/$REPO/contents/bin/"
+FILENAME=$(curl -sSL "$API_URL" | grep -o '"name": *"'$BINARY'-'$OS'-'$ARCH'-[a-zA-Z0-9]*"' | sed 's/.*: *"//;s/"//' | sort | tail -n1)
+if [ -z "$FILENAME" ]; then
+  echo "Could not find a release binary for $OS/$ARCH." >&2
+  exit 1
+fi
 URL="https://raw.githubusercontent.com/$REPO/main/bin/$FILENAME"
 
 TMP=$(mktemp)
