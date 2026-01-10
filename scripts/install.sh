@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-REPO=danlafeir/devctl-tempo
-BINARY=devctl-tempo
+REPO=danlafeir/devctl-timecard
+BINARY=devctl-timecard
 INSTALL_DIR=~/.local/bin
 
 # Detect OS

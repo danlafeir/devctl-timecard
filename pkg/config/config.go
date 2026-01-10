@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	ConfigDirName  = ".devctl/plugins/tempo"
+	ConfigDirName  = ".devctl/plugins/timecard"
 	ConfigFileName = "config"
 )
 

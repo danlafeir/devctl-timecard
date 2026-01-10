@@ -1,19 +1,23 @@
-# devctl-tempo
+# devctl-timecard
 
-A Go CLI for interacting with the Tempo API, using Cobra and Viper. Stores secrets securely on MacOS using the system keychain.
+*I built this because I was frustrated with filling out timecards at work and wanted to make it easier*
+
+This is a CLI for submitting a timecard for the week. It currently supports an integration with the [Tempo API](https://apidocs.tempo.io/). I store secrets in your MacOS keychain and configuration at `$HOME/.timecard/` or `$HOME/.devctl/config` based on the binary. 
+
+I am trying to create a constellation of CLI tools that make my life easier. 
 
 ## Installation
 
 ### Quick Install (Recommended)
 
 #### Standalone Build
-You can install the standalone `tempo` binary with:
+You can install the standalone `timecard` binary with:
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install-standalone.sh | sh
 ```
 
-This script will detect your OS and architecture, download the standalone binary (`tempo-<os>-<arch>`) and install it as `tempo` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
+This script will detect your OS and architecture, download the standalone binary (`timecard-<os>-<arch>`) and install it as `timecard` to `~/.local/bin`. Ensure `~/.local/bin` is in your PATH.
 
 #### Versioned Build (for devctl plugin)
 To install this as a plugin to [devctl](https://github.com/danlafeir/devctl), use the versioned build:
@@ -22,7 +26,7 @@ To install this as a plugin to [devctl](https://github.com/danlafeir/devctl), us
 curl -sSL https://raw.githubusercontent.com/danlafeir/devctl-timecard/main/scripts/install.sh | sh
 ```
 
-This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` as `devctl-tempo`. Ensure `~/.local/bin` is in your PATH.
+This script will detect your OS and architecture, download the latest versioned binary from the main branch, and install it to `~/.local/bin` as `devctl-timecard`. Ensure `~/.local/bin` is in your PATH.
 
 **Security tip:** Always review install scripts before piping to `sh`.
 
@@ -38,7 +42,7 @@ To create an API token in Tempo:
 1. Log in to your Atlassian account and navigate to Tempo
 2. Go to **Settings** → **API Integration** (or **Profile** → **API tokens**)
 3. Click **Create API Token** or **New Token**
-4. Give your token a descriptive name (e.g., "tempo-cli")
+4. Give your token a descriptive name (e.g., "timecard-cli")
 5. Ensure the token has permission to manage **Worklogs**
 6. Copy the generated token (you won't be able to see it again)
 
@@ -57,37 +61,37 @@ To find your Account ID (also known as Atlassian Account ID):
 #### Running Configuration
 To configure your Tempo API token, account ID, and default issue ID:
 
-**If installed as standalone (`tempo`):**
+**If installed as standalone (`timecard`):**
 ```sh
-tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
+timecard configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
 ```
 
-**If installed as devctl plugin (`devctl-tempo`):**
+**If installed as devctl plugin (`devctl-timecard`):**
 ```sh
-devctl tempo configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
+devctl timecard configure --token <YOUR_TOKEN> --account-id <ACCOUNT_ID>
 ```
 You can also omit flags to be prompted interactively.
 
 - The API token is stored securely in the MacOS keychain.
 - The account ID and default issue ID are stored in the config file under a `tempo` key:
-  - **Standalone binary (`tempo`)**: `$HOME/.tempo/config.yaml`
-  - **devctl plugin (`devctl-tempo`)**: `$HOME/.devctl/config.yaml`
+  - **Standalone binary (`timecard`)**: `$HOME/.timecard/config.yaml`
+  - **devctl plugin (`devctl-timecard`)**: `$HOME/.devctl/config.yaml`
 
 The issue ID will be automatically fetched from your most recent Tempo worklog entry (within the past two weeks). Make sure you assigned to the JIRA Project and use a JIRA card that belongs to the appropiate project.
 
 ### Available Commands
 
 #### `timesheet`
-Submit a Tempo timesheet for the current week (or a past week). This is the main command for logging time.
+Submit a timesheet for the current week (or a past week) to Tempo. This is the main command for logging time.
 
-**If installed as standalone (`tempo`):**
+**If installed as standalone (`timecard`):**
 ```sh
-tempo timesheet
+timecard timesheet
 ```
 
-**If installed as devctl plugin (`devctl-tempo`):**
+**If installed as devctl plugin (`devctl-timecard`):**
 ```sh
-devctl tempo timesheet
+devctl timecard timesheet
 ```
 
 The command will:
@@ -101,14 +105,14 @@ The command will:
 #### `configure`
 Set up your Tempo API token, account ID, and default issue ID.
 
-**If installed as standalone (`tempo`):**
+**If installed as standalone (`timecard`):**
 ```sh
-tempo configure
+timecard configure
 ```
 
-**If installed as devctl plugin (`devctl-tempo`):**
+**If installed as devctl plugin (`devctl-timecard`):**
 ```sh
-devctl-tempo configure
+devctl timecard configure
 ```
 
 Options:
@@ -128,7 +132,7 @@ Options:
 Clone the repository and install dependencies:
 ```sh
 git clone <repo-url>
-cd devctl-tempo
+cd devctl-timecard
 go mod tidy
 ```
 
@@ -138,7 +142,7 @@ Build for your current OS and architecture:
 ```sh
 make build
 ```
-The binary will be output to `bin/devctl-tempo-<os>-<arch>-<hash>`.
+The binary will be output to `bin/devctl-timecard-<os>-<arch>-<hash>`.
 
 Build for all supported OS/arch:
 ```sh
@@ -146,17 +150,17 @@ make build-all
 ```
 Binaries for Linux, MacOS (amd64/arm64) will be in `bin/`.
 
-Build a standalone binary named `tempo` for your current system:
+Build a standalone binary named `timecard` for your current system:
 ```sh
 make build-standalone
 ```
-The binary will be output to `bin/tempo`.
+The binary will be output to `bin/timecard`.
 
 Build standalone binaries for all supported OS/arch:
 ```sh
 make build-all-standalone
 ```
-Standalone binaries (tempo-linux-amd64, tempo-linux-arm64, tempo-darwin-amd64, tempo-darwin-arm64) will be in `bin/`.
+Standalone binaries (timecard-linux-amd64, timecard-linux-arm64, timecard-darwin-amd64, timecard-darwin-arm64) will be in `bin/`.
 
 Cross-compile for a specific system:
 ```sh
@@ -166,17 +170,17 @@ GOOS=linux GOARCH=amd64 make build
 ### Running Locally
 After building, run the CLI:
 ```sh
-./bin/devctl-tempo-<os>-<arch>-<hash> <command>
+./bin/devctl-timecard-<os>-<arch>-<hash> <command>
 ```
 
 For example:
 ```sh
-./bin/devctl-tempo-darwin-arm64-d58b1d5 <command>
+./bin/devctl-timecard-darwin-arm64-d58b1d5 <command>
 ```
 
 Or if you built the standalone version:
 ```sh
-./bin/tempo <command>
+./bin/timecard <command>
 ```
 
 ### Testing

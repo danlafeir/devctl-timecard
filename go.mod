@@ -1,4 +1,4 @@
-module github.com/danlafeir/devctl-tempo
+module github.com/danlafeir/devctl-timecard
 
 go 1.24.3
 

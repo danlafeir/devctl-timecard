@@ -22,7 +22,7 @@ func TestGetConfigPath(t *testing.T) {
 		{
 			name:           "uses default path when configPath empty",
 			configPathVar:  "",
-			expectedSuffix: "", // Will check for either .devctl or .tempo based on binary name
+			expectedSuffix: "", // Will check for either .devctl or .timecard based on binary name
 		},
 	}
 
@@ -42,11 +42,11 @@ func TestGetConfigPath(t *testing.T) {
 					t.Errorf("expected %s, got %s", tt.configPathVar, result)
 				}
 			} else {
-				// Check that it uses either .devctl or .tempo based on binary name
+				// Check that it uses either .devctl or .timecard based on binary name
 				hasDevctlSuffix := strings.HasSuffix(result, "/.devctl/config.yaml")
-				hasTempoSuffix := strings.HasSuffix(result, "/.tempo/config.yaml")
-				if !hasDevctlSuffix && !hasTempoSuffix {
-					t.Errorf("expected result to end with either /.devctl/config.yaml or /.tempo/config.yaml, got %s", result)
+				hasTimecardSuffix := strings.HasSuffix(result, "/.timecard/config.yaml")
+				if !hasDevctlSuffix && !hasTimecardSuffix {
+					t.Errorf("expected result to end with either /.devctl/config.yaml or /.timecard/config.yaml, got %s", result)
 				}
 			}
 		})

@@ -18,14 +18,14 @@ package cmd
 import (
 	"os"
 
-	"github.com/danlafeir/devctl-tempo/cmd/tempo"
+	"github.com/danlafeir/devctl-timecard/cmd/tempo"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Version:      "1.0",
-	Use:          "tempo",
-	Short:        "Tempo timesheet management commands",
+	Use:          "timecard",
+	Short:        "commands to manage your timecard",
 	SilenceUsage: true,
 }
 

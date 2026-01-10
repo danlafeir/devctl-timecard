@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-REPO=danlafeir/devctl-tempo
-BINARY=tempo
+REPO=danlafeir/devctl-timecard
+BINARY=timecard
 INSTALL_DIR=~/.local/bin
 
 # Detect OS
@@ -22,8 +22,8 @@ case "$ARCH" in
 esac
 
 # Find the standalone binary for this OS/ARCH
-# Standalone builds use the pattern: tempo-<os>-<arch>
-FILENAME="tempo-$OS-$ARCH"
+# Standalone builds use the pattern: timecard-<os>-<arch>
+FILENAME="timecard-$OS-$ARCH"
 URL="https://raw.githubusercontent.com/$REPO/main/bin/$FILENAME"
 
 TMP=$(mktemp)

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/danlafeir/devctl-tempo/api"
+	"github.com/danlafeir/devctl-timecard/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -46,8 +46,8 @@ func TimesheetCmd() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:     "timesheet",
-		Short:   "Submit a Tempo timesheet",
-		Example: "devctl tempo timesheet",
+		Short:   "Submit a timesheet to Tempo",
+		Example: "devctl timecard timesheet",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			bearerToken := fetchBearerToken()
 			accountId, issueId := fetchConfig()

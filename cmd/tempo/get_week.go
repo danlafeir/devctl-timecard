@@ -14,12 +14,12 @@ import (
 func GetWeekCmd() *cobra.Command {
 	return &cobra.Command{
 	Hidden: true,
-	Use:   "get-week",
-	Short: "Fetch your current week's timecard from Tempo API",
+		Use:   "get-week",
+		Short: "Fetch your current week's timecard from the Tempo API",
 	Run: func(cmd *cobra.Command, args []string) {
 		token, err := secrets.DefaultSecrets.Read(API_TOKEN_LOCATION)
 		if err != nil || token == "" {
-			fmt.Println("Tempo API token not found. Please run 'tempo configure' first.")
+			fmt.Println("Tempo API token not found. Please run 'timecard configure' first.")
 			os.Exit(1)
 		}
 		apiToken := token
