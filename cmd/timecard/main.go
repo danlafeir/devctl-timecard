@@ -15,7 +15,7 @@ func ConfigureCmd() *cobra.Command {
 
 	configureCmd := &cobra.Command{
 		Use:   "configure",
-		Short: "Configure your Tempo API token and default issue ID",
+		Short: "Configure integration with timesheet tool (currently just Tempo)",
 		Run: func(cmd *cobra.Command, args []string) {
 			initConfig()
 			viper.ReadInConfig()
