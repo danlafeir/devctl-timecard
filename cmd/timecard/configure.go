@@ -14,10 +14,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-const ACCOUNT = "tempo"
-const API_TOKEN_LOCATION = "cli.devctl.tempo"
-const ACCOUNT_ID = "tempoAccountId"
-const ISSUE_ID = "tempoIssueId"
+const TOP_LEVEL_CONFIG = "timecard"
+const API_TOKEN_CONFIG = "cli.devctl.timecard"
+const ACCOUNT_ID_CONFIG = TOP_LEVEL_CONFIG + ".tempo.accountId"
+const ISSUE_ID_CONFIG = TOP_LEVEL_CONFIG + ".tempo.issueId"
 
 var configPath string
 
@@ -35,7 +35,7 @@ func configureApiToken(apiToken string) string {
 		os.Exit(1)
 	}
 
-	if err := secrets.DefaultSecrets.Write(API_TOKEN_LOCATION, token); err != nil {
+	if err := secrets.DefaultSecrets.Write(API_TOKEN_CONFIG, token); err != nil {
 		fmt.Println("Failed to write token to keychain:", err)
 		os.Exit(1)
 	}
@@ -55,7 +55,7 @@ func configureAccountId(accountId string) {
 		fmt.Println("Account ID cannot be empty.")
 		os.Exit(1)
 	}
-	viper.Set("tempo."+ACCOUNT_ID, accountId)
+	viper.Set(ACCOUNT_ID_CONFIG, accountId)
 }
 
 func configureIssueId(accountId string) {
@@ -77,13 +77,13 @@ func configureIssueId(accountId string) {
 			fmt.Println("Issue ID cannot be empty.")
 			os.Exit(1)
 		}
-		viper.Set("tempo."+ISSUE_ID, id)
+		viper.Set(ISSUE_ID_CONFIG, id)
 		return
 	}
 
 	id := strconv.Itoa(recentIssueId)
 	fmt.Printf("Found recent issue ID: %s\n", id)
-	viper.Set("tempo."+ISSUE_ID, id)
+	viper.Set(ISSUE_ID_CONFIG, id)
 }
 
 func getConfigPath() string {
@@ -129,10 +129,10 @@ func initConfig() {
 		log.Fatal("Failed to create config directory:", err)
 	}
 
-	// Create config file if it doesn't exist (with empty tempo structure)
+	// Create config file if it doesn't exist (with empty timecard structure)
 	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {
-		// Create empty config file with tempo key structure (tempo.* keys are used for Tempo API settings)
-		emptyConfig := []byte("tempo:\n")
+		// Create empty config file with timecard.tempo key structure
+		emptyConfig := []byte("timecard:\n  tempo:\n")
 		if err := os.WriteFile(configFilePath, emptyConfig, 0644); err != nil {
 			log.Fatal("Failed to create config file:", err)
 		}
@@ -150,16 +150,16 @@ func fetchConfig() (accountId string, issueId string) {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	if !viper.IsSet("tempo." + ACCOUNT_ID) {
+	if !viper.IsSet(ACCOUNT_ID_CONFIG) {
 		configureAccountId("")
 	} else {
-		accountId = viper.GetString("tempo." + ACCOUNT_ID)
+		accountId = viper.GetString(ACCOUNT_ID_CONFIG)
 	}
 
-	if !viper.IsSet("tempo." + ISSUE_ID) {
+	if !viper.IsSet(ISSUE_ID_CONFIG) {
 		configureIssueId(accountId)
 	} else {
-		issueId = viper.GetString("tempo." + ISSUE_ID)
+		issueId = viper.GetString(ISSUE_ID_CONFIG)
 	}
 
 	return
