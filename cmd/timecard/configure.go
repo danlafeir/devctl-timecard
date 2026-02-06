@@ -166,7 +166,7 @@ func fetchConfig() (accountId string, issueId string) {
 }
 
 func fetchBearerToken() string {
-	bearerToken, err := secrets.DefaultSecrets.Read(API_TOKEN_LOCATION)
+	bearerToken, err := secrets.DefaultSecrets.Read(API_TOKEN_CONFIG)
 
 	if bearerToken == "" || err != nil {
 		return configureApiToken("")
