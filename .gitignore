@@ -24,11 +24,6 @@ go.work.sum
 # env file
 .env
 
-# output of go build not in /bin
-devctl-tempo
-bin/tempo
-bin/devctl-tempo
-
 # macOS files
 .DS_Store
 **/.DS_Store
