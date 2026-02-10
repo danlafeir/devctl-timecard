@@ -135,6 +135,44 @@ func TestDetermineWeekforTimeSheet_Integration(t *testing.T) {
 	}
 }
 
+func TestStringToInt(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{
+			name:     "positive integer",
+			input:    "42",
+			expected: 42,
+		},
+		{
+			name:     "zero",
+			input:    "0",
+			expected: 0,
+		},
+		{
+			name:     "large number",
+			input:    "9999",
+			expected: 9999,
+		},
+		{
+			name:     "single digit",
+			input:    "8",
+			expected: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := stringToInt(tt.input)
+			if got != tt.expected {
+				t.Errorf("stringToInt(%q) = %d, want %d", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+
 // Note: The following functions are difficult to test without mocking stdin/stdout:
 // - requestTimeInput() - requires user input via fmt.Scan
 // - getTime() - requires user input via fmt.Scan  
