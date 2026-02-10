@@ -88,7 +88,7 @@ func TestConfigureAccountId(t *testing.T) {
 		{
 			name:        "account id provided",
 			inputId:     "test-account-123",
-			expectedKey: "tempo." + ACCOUNT_ID,
+			expectedKey: ACCOUNT_ID_CONFIG,
 			expectedVal: "test-account-123",
 		},
 	}
@@ -145,10 +145,10 @@ func TestFetchConfig(t *testing.T) {
 			
 			// Set preset values if provided
 			if tt.presetAccountId != "" {
-				viper.Set("tempo."+ACCOUNT_ID, tt.presetAccountId)
+				viper.Set(ACCOUNT_ID_CONFIG, tt.presetAccountId)
 			}
 			if tt.presetIssueId != "" {
-				viper.Set("tempo."+ISSUE_ID, tt.presetIssueId)
+				viper.Set(ISSUE_ID_CONFIG, tt.presetIssueId)
 			}
 			
 			// Write config file

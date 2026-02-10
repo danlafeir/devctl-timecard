@@ -15,7 +15,8 @@ import (
 )
 
 const TOP_LEVEL_CONFIG = "timecard"
-const API_TOKEN_CONFIG = "cli.devctl.timecard"
+const SECRETS_NAMESPACE = "timecard"
+const API_TOKEN_NAME = "jira-api-token"
 const ACCOUNT_ID_CONFIG = TOP_LEVEL_CONFIG + ".tempo.accountId"
 const ISSUE_ID_CONFIG = TOP_LEVEL_CONFIG + ".tempo.issueId"
 
@@ -35,7 +36,7 @@ func configureApiToken(apiToken string) string {
 		os.Exit(1)
 	}
 
-	if err := secrets.DefaultSecrets.Write(API_TOKEN_CONFIG, token); err != nil {
+	if err := secrets.Write(SECRETS_NAMESPACE, API_TOKEN_NAME, token); err != nil {
 		fmt.Println("Failed to write token to keychain:", err)
 		os.Exit(1)
 	}
@@ -166,7 +167,7 @@ func fetchConfig() (accountId string, issueId string) {
 }
 
 func fetchBearerToken() string {
-	bearerToken, err := secrets.DefaultSecrets.Read(API_TOKEN_CONFIG)
+	bearerToken, err := secrets.Read(SECRETS_NAMESPACE, API_TOKEN_NAME)
 
 	if bearerToken == "" || err != nil {
 		return configureApiToken("")
